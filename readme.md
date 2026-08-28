@@ -74,31 +74,60 @@ Command-Line Arguments
 1. Default inspection:
 ```
 ./ghex sample.bin
+
+Reading bytes of file sample.bin:
+00000000: 7F 45 4C 46 02 01 01 00 00 00 00 00 00 00 00 00  |.ELF............|
+00000010: 03 00 3E 00 01 00 00 00 50 10 00 00 00 00 00 00  |..>.....P.......|
+00000020: 48 65 6C 6C 6F 2C 20 57 6F 72 6C 64 21 0A        |Hello, World!.  |
 ```
+
+
 
 2. Custom width
 ```
 ./ghex --width=8 sample.bin
+
+Reading bytes of file sample.bin:
+00000000: 7F 45 4C 46 02 01 01 00  |.ELF....|
+00000008: 00 00 00 00 00 00 00 00  |........|
+00000010: 03 00 3E 00 01 00 00 00  |..>.....|
 ```
 
 3. Range-Limited Dump
 ```
-./ghex --start=256 --end=512 sample.bin
+./ghex --start=32 --end=45 sample.bin
+
+Reading bytes of file sample.bin:
+00000020: 48 65 6C 6C 6F 2C 20 57 6F 72 6C 64 21 0A        |Hello, World!.  |
 ```
 
 4. Row-Limited Dump
 ```
-./ghex --start=1024 --rows=4 sample.bin
+./ghex --start=16 --rows=2 sample.bin
+
+Reading bytes of file sample.bin:
+00000010: 03 00 3E 00 01 00 00 00 50 10 00 00 00 00 00 00  |..>.....P.......|
+00000020: 48 65 6C 6C 6F 2C 20 57 6F 72 6C 64 21 0A        |Hello, World!.  |
 ```
 
 5. Hex-Only View (No ASCII)
 ```
 ./ghex --width=16 --no-ascii sample.bin
+
+Reading bytes of file sample.bin:
+00000000: 7F 45 4C 46 02 01 01 00 00 00 00 00 00 00 00 00 
+00000010: 03 00 3E 00 01 00 00 00 50 10 00 00 00 00 00 00 
+00000020: 48 65 6C 6C 6F 2C 20 57 6F 72 6C 64 21 0A
 ```
 
 6. Search for Plain Text
 ```
-./ghex --search-text="ELF" sample.bin
+./ghex --search-text="Hello" sample.bin
+
+Reading bytes of file sample.bin:
+
+[Match #1 at offset 0x00000020 (32)]
+00000020: 48 65 6C 6C 6F 2C 20 57 6F 72 6C 64 21 0A        |Hello, World!.  |
 ```
 
 7. Search for Hex Byte Sequences
@@ -106,11 +135,20 @@ Command-Line Arguments
 ./ghex --search-hex="7F 45 4C 46" sample.bin
 # Or contiguous:
 ./ghex --search-hex="7f454c46" sample.bin
+
+Reading bytes of file sample.bin:
+[Match #1 at offset 0x00000000 (0)]
+00000000: 7F 45 4C 46 02 01 01 00 00 00 00 00 00 00 00 00  |.ELF............|
 ```
 
 8. Combined Search and Formatting
 ```
-./ghex --search-hex="89 50 4E 47" --rows=2 --no-ascii image.png
+./ghex --search-hex="7F 45 4C 46" --rows=2 --no-ascii sample.bin
+
+Reading bytes of file sample.bin:
+[Match #1 at offset 0x00000000 (0)]
+00000000: 7F 45 4C 46 02 01 01 00 00 00 00 00 00 00 00 00 
+00000010: 03 00 3E 00 01 00 00 00 50 10 00 00 00 00 00 00
 ```
 
 ---
